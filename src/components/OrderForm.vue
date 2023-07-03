@@ -19,8 +19,38 @@ const props = defineProps({
   departure_time: Number,
   arrival_time: Number,
   duration: String,
-  ticket_info: Array as PropType<TicketInfo[]>
+  ticket_info: {
+    type: Array as PropType<TicketInfo[]>,
+    default: () => [
+      { type: '软卧', price: 100 },
+      { type: '硬卧', price: 80 },
+      { type: '软座', price: 50 },
+      { type: '硬座', price: 20 },
+      { type: '商务座', price: 200 },
+      { type: '一等座', price: 150 },
+      { type: '二等座', price: 100 }
+    ],
+  }
 })
+
+// const getTrainType = (name: String | undefined) => {
+//   if (name) {
+//     console.log("getTrain")
+//     request({
+//       url: `/train/${name}`,
+//       method: 'GET'
+//     }).then((res) => {
+//       return res.data.train_type
+//     }).catch((error) => {
+//       ElNotification({
+//         offset: 70,
+//         title: 'getTrain错误(orderDetail)',
+//         message: h('error', { style: 'color: teal' }, error.response?.data.msg),
+//       })
+//       console.log(error)
+//     })
+//   }
+// }
 
 const stations = useStationsStore()
 const user = useUserStore()
@@ -112,6 +142,7 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
     </el-col>
   </el-row>
   <br />
+
   <el-row justify="center" class="el-row">
     <el-col :span="11" style="display: flex; justify-content: right; align-items: center">
       <el-text>
@@ -162,8 +193,15 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
     </el-form-item>
     <el-form-item label="坐席" prop="seat_type">
       <el-select v-model="orderForm.seat_type">
-        <el-option v-for="ticket in props.ticket_info" :value="ticket.type" :label="`${ticket.type}  ${ticket.price}元`"
+        <el-option v-for="ticket in props.ticket_info" :value="ticket.type" :label="`${ticket.type}`"
           :disabled="ticket.count == 0" />
+        <!-- <el-option v-if="getTrain() === '高铁'" value="商务座" label="商务座" />
+        <el-option v-if="train.data.trainType === '高铁'" value="一等座" label="一等座" />
+        <el-option v-if="train.data.trainType === '高铁'" value="二等座" label="二等座" />
+        <el-option v-if="train.data.trainType === '普通列车'" value="软卧" label="软卧" />
+        <el-option v-if="train.data.trainType === '普通列车'" value="硬卧" label="硬卧" />
+        <el-option v-if="train.data.trainType === '普通列车'" value="软座" label="软座" />
+        <el-option v-if="train.data.trainType === '普通列车'" value="硬座" label="硬座" /> -->
       </el-select>
     </el-form-item>
     <el-form-item>

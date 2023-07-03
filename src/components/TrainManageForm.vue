@@ -14,7 +14,8 @@ const props = defineProps({
   departure_times: Array,
   arrival_times: Array,
   extra_infos: Array,
-  train_type: String
+  train_type: String,
+  price: Number
 })
 
 
@@ -28,7 +29,8 @@ let train = reactive({
   date: props.date,
   departure_times: props.departure_times as Array<string>,
   arrival_times: props.arrival_times as Array<string>,
-  extra_infos: props.extra_infos as Array<string>
+  extra_infos: props.extra_infos as Array<string>,
+  price: props.price
 })
 let route = reactive({
   id: 0,
@@ -130,7 +132,7 @@ getRoute()
     </el-row>
 
     <el-row>
-      <el-col :span="24">
+      <el-col :span="15">
         <el-form-item>
           <template #label>
             <el-text tag="b" type="primary">
@@ -143,7 +145,19 @@ getRoute()
           </el-select>
         </el-form-item>
       </el-col>
+
+      <el-col :span="7" :offset="1">
+        <el-form-item style="display: flex">
+          <template #label>
+            <el-text tag="b" type="primary">
+              两站间价格
+            </el-text>
+          </template>
+          <el-input v-model="train.name" />
+        </el-form-item>
+      </el-col>
     </el-row>
+
 
     <div v-for="(station, index) in route.station_ids" :key="station">
       <el-card style="margin-bottom: 0.25%" shadow="hover" class="container">
