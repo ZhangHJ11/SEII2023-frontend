@@ -7,6 +7,7 @@ import { useStationsStore } from "~/stores/stations";
 import { parseDate } from "~/utils/date";
 import { useRouter } from "vue-router";
 import { OrderDetailData } from "~/utils/interfaces";
+import axios from "axios";
 
 const router = useRouter()
 const stations = useStationsStore()
@@ -130,6 +131,19 @@ const cancel = (id: number) => {
   })
 }
 
+const generateOrder = () => {
+    let url;
+    axios.post("http://localhost:8080/api/do-post-test") // 向后端发送请求，获取支付页面的 URL
+        .then((response) => {
+            url = response.data;
+            console.log(url);
+            window.location.href=url;
+        }).catch((error) => {
+        console.log("errorOrderPath");
+        // 处理请求失败的情况
+    });
+};
+
 watch(orderDetail, () => {
   getTrain()
 })
@@ -218,7 +232,7 @@ getOrderDetail()
         <el-button type="danger" @click="cancel(id ?? -1)">
           取消订单
         </el-button>
-        <el-button type="primary" @click="pay(id ?? -1)">
+        <el-button type="primary" @click="generateOrder(), pay(id ?? -1)">
           支付订单
         </el-button>
       </div>
