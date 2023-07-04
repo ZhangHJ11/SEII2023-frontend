@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { h, reactive, ref, watch } from 'vue'
 import { SwitchFilled } from "@element-plus/icons-vue";
-import { useStationsStore } from "~/stores/stations";
 import { ElNotification } from "element-plus";
-import { request } from "~/utils/request";
+import { h, reactive, ref, watch } from 'vue';
 import { useRouter } from "vue-router";
+import { useStationsStore } from "~/stores/stations";
 import { RouteInfo } from '~/utils/interfaces';
+import { request } from "~/utils/request";
 
 const props = defineProps({
   name: String,
@@ -15,7 +15,8 @@ const props = defineProps({
   arrival_times: Array,
   extra_infos: Array,
   train_type: String,
-  price: Number
+  price: Number,
+  seat_num: Number
 })
 
 
@@ -30,7 +31,8 @@ let train = reactive({
   departure_times: props.departure_times as Array<string>,
   arrival_times: props.arrival_times as Array<string>,
   extra_infos: props.extra_infos as Array<string>,
-  price: props.price
+  price: props.price,
+  seat_num: props.seat_num
 })
 let route = reactive({
   id: 0,
@@ -132,7 +134,7 @@ getRoute()
     </el-row>
 
     <el-row>
-      <el-col :span="15">
+      <el-col :span="7">
         <el-form-item>
           <template #label>
             <el-text tag="b" type="primary">
@@ -153,7 +155,18 @@ getRoute()
               两站间价格
             </el-text>
           </template>
-          <el-input v-model="train.name" />
+          <el-input v-model="train.price" />
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="7" :offset="1">
+        <el-form-item style="display: flex">
+          <template #label>
+            <el-text tag="b" type="primary">
+              座位数量
+            </el-text>
+          </template>
+          <el-input v-model="train.seat_num" />
         </el-form-item>
       </el-col>
     </el-row>
