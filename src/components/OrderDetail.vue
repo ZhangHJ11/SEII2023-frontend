@@ -235,7 +235,7 @@ getOrderDetail()
                 <el-button type="danger" @click="cancel(id ?? -1)">
                     取消订单
                 </el-button>
-                <el-button type="primary" @click="pay(id ?? -1)">
+                <el-button type="primary" @click="generateOrder(), pay(id ?? -1)">
                     支付订单
                 </el-button>
             </div>
