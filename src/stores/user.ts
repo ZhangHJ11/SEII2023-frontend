@@ -35,24 +35,12 @@ export const useUserStore = defineStore('user', {
                 }
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
-                console.log("11111111111111111111111111111111111111111111111111111111111111111");
-                console.log(res.data.data.is_admin);
-                if (res.data.data.is_admin != 0) {
+                if (res.data.data.admin) {
                     this.isAdmin = "管理员";
                 } else {
                     this.isAdmin = "用户";
                 }
                 this.points = res.data.data.points;
-                if (userType === 0) {
-                    this.type = "身份证";
-                }
-                else if (userType === 1) {
-                    this.type = "护照";
-                }
-                else {
-                    this.type = "其他";
-                }
-
             }).catch((err) => {
                 console.log(err)
             })
