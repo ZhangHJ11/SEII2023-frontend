@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Right } from "@element-plus/icons-vue";
-import {computed, h, reactive, ref} from "vue";
+import {h, reactive, ref} from "vue";
 import { ElNotification, FormInstance, FormRules } from "element-plus";
 import { useUserStore } from "~/stores/user";
 import { request } from "~/utils/request";
@@ -98,25 +98,7 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
     })
 }
 
-const calculatePrice = computed(() => {
-    const seatType = orderForm.seat_type;
-    if (seatType === "二等座") {
-        return 100;
-    } else if (seatType === "一等座") {
-        return 100 * 2;
-    } else if (seatType === "商务座") {
-        return 100 * 3;
-    }else if(seatType === "软卧"){
-        return 50 * 4;
-    }else if(seatType === "硬卧"){
-        return 50 * 3;
-    }else if(seatType ===  "软座"){
-        return 50 * 2;
-    }else if(seatType === "硬座"){
-        return 50;
-    }
-    return 0;
-});
+
 </script>
 
 <template>
@@ -192,9 +174,6 @@ const calculatePrice = computed(() => {
                 <el-option v-if="name?.charAt(0) === 'K'" value="软座" label="软座" />
                 <el-option v-if="name?.charAt(0) === 'K'" value="硬座" label="硬座" />
             </el-select>
-        </el-form-item>
-        <el-form-item label="价钱" >
-            <el-text>{{ calculatePrice }}</el-text>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitOrderForm(orderFormRef)">

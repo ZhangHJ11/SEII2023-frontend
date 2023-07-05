@@ -24,9 +24,20 @@ export const useUserStore = defineStore('user', {
             }).then((res) => {
                 this.username = res.data.data.username;
                 this.name = res.data.data.name;
-                this.type = res.data.data.type;
+                const userType = res.data.data.type;
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
+
+                if(userType === 0){
+                    this.type = "身份证";
+                }
+                else if(userType === 1){
+                    this.type = "护照";
+                }
+                else{
+                    this.type = "其他";
+                }
+
             }).catch((err) => {
                 console.log(err)
             })
