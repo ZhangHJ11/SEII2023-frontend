@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', {
             }).then((res) => {
                 this.username = res.data.data.username;
                 this.name = res.data.data.name;
-                const userType = res.data.data.type;
+                const userType = res.data.data.id_type;
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
 
