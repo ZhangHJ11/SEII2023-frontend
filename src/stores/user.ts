@@ -8,7 +8,8 @@ export const useUserStore = defineStore('user', {
             name: '',
             type: '',
             idn: '',
-            phone: ''
+            phone: '',
+            points: 0,
         }
     },
     getters: {
@@ -27,7 +28,7 @@ export const useUserStore = defineStore('user', {
                 const userType = res.data.data.id_type;
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
-
+                this.points = res.data.data.points;
                 if(userType === 0){
                     this.type = "身份证";
                 }
