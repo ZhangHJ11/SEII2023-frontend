@@ -157,6 +157,19 @@ watch(() => train.route_id, () => {
   getRoute()
 })
 getRoute()
+
+function updateTicketPrice(value: number, id: number) {
+    // value是价格，id是数组的下表
+    train.ticket_infos[id].price = value;
+    console.log(train.ticket_infos[id].price);
+}
+
+function updateTicketNumber(value: number, id: number) {
+    // value是数量，id是数组的下表
+    train.ticket_infos[id].count = value;
+    console.log(train.ticket_infos[id].count);
+}
+
 </script>
 
 <template>
@@ -211,50 +224,55 @@ getRoute()
           </el-select>
         </el-form-item>
       </el-col>
-
-      <el-col :span="7" :offset="1">
-        <el-form-item style="display: flex">
-          <template #label>
-            <el-text tag="b" type="primary">
-              两站间价格
-            </el-text>
-          </template>
-          <template v-if="train.train_type === '高铁'">
-            <el-input v-model="train.ticket_infos[0].price" placeholder="商务座价格"/>
-            <el-input v-model="train.first_class_seat_price" placeholder="一等座价格"/>
-            <el-input v-model="train.second_class_seat_price" placeholder="二等座价格"/>
-          </template>
-          <template v-else-if="train.train_type === '普通列车'">
-            <el-input v-model="train.soft_sleep_price" placeholder="软卧价格"/>
-            <el-input v-model="train.hard_sleep_price" placeholder="硬卧价格"/>
-            <el-input v-model="train.soft_seat_price" placeholder="软座价格"/>
-            <el-input v-model="train.hard_seat_price" placeholder="硬座价格"/>
-          </template>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="7" :offset="1">
-        <el-form-item style="display: flex">
-          <template #label>
-            <el-text tag="b" type="primary">
-              座位数量
-            </el-text>
-          </template>
-          <!-- Display different input fields based on the selected train_type -->
-          <template v-if="train.train_type === '高铁'">
-            <el-input v-model="train.business_seat_num" placeholder="商务座数量"/>
-            <el-input v-model="train.first_class_seat_num" placeholder="一等座数量"/>
-            <el-input v-model="train.second_class_seat_num" placeholder="二等座数量"/>
-          </template>
-          <template v-else-if="train.train_type === '普通列车'">
-            <el-input v-model="train.soft_sleep_num" placeholder="软卧数量"/>
-            <el-input v-model="train.hard_sleep_num" placeholder="硬卧数量"/>
-            <el-input v-model="train.soft_seat_num" placeholder="软座数量"/>
-            <el-input v-model="train.hard_seat_num" placeholder="硬座数量"/>
-          </template>
-        </el-form-item>
-      </el-col>
     </el-row>
+
+      <el-row>
+          <el-col :span="7" :offset="0">
+              <el-form-item style="display: flex">
+                  <template #label>
+                      <el-text tag="b" type="primary">
+                          两站间价格
+                      </el-text>
+                  </template>
+                  <template v-if="train.train_type === '高铁'">
+<!--                      <el-input v-model="train.ticket_infos[0].price" placeholder="商务座价格"/>-->
+                      <el-input v-model="train.business_seat_price" @change="updateTicketPrice(<number>train.business_seat_price,0)" placeholder="商务座价格"/>
+                      <el-input v-model="train.first_class_seat_price" @change="updateTicketPrice(<number>train.first_class_seat_price,1)" placeholder="一等座价格"/>
+                      <el-input v-model="train.second_class_seat_price" @change="updateTicketPrice(<number>train.second_class_seat_price,2)" placeholder="二等座价格"/>
+                  </template>
+                  <template v-else-if="train.train_type === '普通列车'">
+                      <el-input v-model="train.soft_sleep_price" @change="updateTicketPrice(<number>train.soft_sleep_price,0)" placeholder="软卧价格"/>
+                      <el-input v-model="train.hard_sleep_price" @change="updateTicketPrice(<number>train.hard_sleep_price,1)" placeholder="硬卧价格"/>
+                      <el-input v-model="train.soft_seat_price" @change="updateTicketPrice(<number>train.soft_seat_price,2)" placeholder="软座价格"/>
+                      <el-input v-model="train.hard_seat_price" @change="updateTicketPrice(<number>train.hard_seat_price,3)" placeholder="硬座价格"/>
+                  </template>
+              </el-form-item>
+          </el-col>
+      </el-row>
+
+      <el-row>
+          <el-col :span="7" :offset="0">
+              <el-form-item style="display: flex">
+                  <template #label>
+                      <el-text tag="b" type="primary">
+                          座位数量
+                      </el-text>
+                  </template>
+                  <!-- Display different input fields based on the selected train_type -->
+                  <template v-if="train.train_type === '高铁'">
+                      <el-input v-model="train.business_seat_num" @change="updateTicketNumber(<number>train.business_seat_num,0)" placeholder="商务座数量"/>
+                      <el-input v-model="train.first_class_seat_num" @change="updateTicketNumber(<number>train.first_class_seat_num,1)" placeholder="一等座数量"/>
+                      <el-input v-model="train.second_class_seat_num" @change="updateTicketNumber(<number>train.second_class_seat_num,2)" placeholder="二等座数量"/>
+                  </template>
+                  <template v-else-if="train.train_type === '普通列车'">
+                      <el-input v-model="train.soft_sleep_num" @change="updateTicketNumber(<number>train.soft_sleep_num,0)" placeholder="软卧数量"/>
+                      <el-input v-model="train.hard_sleep_num" @change="updateTicketNumber(<number>train.hard_sleep_num,1)" placeholder="硬卧数量"/>
+                      <el-input v-model="train.soft_seat_num" @change="updateTicketNumber(<number>train.soft_seat_num,2)" placeholder="软座数量"/>
+                      <el-input v-model="train.hard_seat_num" @change="updateTicketNumber(<number>train.hard_seat_num,3)" placeholder="硬座数量"/>
+                  </template>
+              </el-form-item>
+          </el-col>
+      </el-row>
 
 
     <div v-for="(station, index) in route.station_ids" :key="station">
