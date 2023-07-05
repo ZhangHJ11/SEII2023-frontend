@@ -17,15 +17,17 @@ let form = reactive({
   name: '',
   type: '',
   idn: '',
-  phone: ''
+  phone: '',
+  isAdmin:''
 });
 
 const setForm = async () => {
   form.username = user.username;
   form.name = user.name;
-  form.type = user.type;
+  form.type = user.idType;
   form.idn = user.idn;
   form.phone = user.phone;
+  form.isAdmin = user.isAdmin;
 }
 
 watch(user, () => {
@@ -131,6 +133,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone" style="width: 25vh" :disabled="!edit" />
+      </el-form-item>
+
+      <el-form-item label="身份类型" prop="isAdmin">
+        <el-input v-model="form.isAdmin" style="width: 25vh" :disabled="!edit" />
       </el-form-item>
     </el-form>
   </div>

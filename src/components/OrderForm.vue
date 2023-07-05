@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { Right } from "@element-plus/icons-vue";
-import {computed, h, reactive, ref} from "vue";
-import { ElNotification, FormInstance, FormRules } from "element-plus";
-import { useUserStore } from "~/stores/user";
-import { request } from "~/utils/request";
 import { AxiosError, AxiosResponse } from "axios";
+import { ElNotification, FormInstance, FormRules } from "element-plus";
+import { PropType, h, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStationsStore } from "~/stores/stations";
+import { useUserStore } from "~/stores/user";
 import { parseDate } from "~/utils/date";
 import { TicketInfo } from "~/utils/interfaces";
-import { PropType } from "vue";
+import { request } from "~/utils/request";
 
 const props = defineProps({
     id: Number,
@@ -31,10 +30,10 @@ const router = useRouter()
 const orderFormRef = ref<FormInstance>()
 let orderForm = reactive({
     name: user.name,
-    type: user.type,
+    type: user.idType,
     idn: user.idn,
     phone: user.phone,
-    seat_type: '',
+    seat_type: ''
 })
 
 const orderRules = reactive<FormRules>({
@@ -52,8 +51,8 @@ const orderRules = reactive<FormRules>({
     phone: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         pattern: /^1[3456789]\d{9}$/, message: '手机号码不符合要求', trigger: 'change'
     }],
-    seat_type: [{ required: true, message: '此字段为必填项', trigger: 'change' },{
-        pattern: /^(二等座|一等座|商务座)$/, message: '座次不符合',trigger: 'change'
+    seat_type: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
+        pattern: /^(二等座|一等座|商务座)$/, message: '座次不符合', trigger: 'change'
     }],
 })
 
@@ -97,26 +96,6 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
         })
     })
 }
-
-const calculatePrice = computed(() => {
-    const seatType = orderForm.seat_type;
-    if (seatType === "二等座") {
-        return 100;
-    } else if (seatType === "一等座") {
-        return 100 * 2;
-    } else if (seatType === "商务座") {
-        return 100 * 3;
-    }else if(seatType === "软卧"){
-        return 50 * 4;
-    }else if(seatType === "硬卧"){
-        return 50 * 3;
-    }else if(seatType ===  "软座"){
-        return 50 * 2;
-    }else if(seatType === "硬座"){
-        return 50;
-    }
-    return 0;
-});
 </script>
 
 <template>
@@ -183,18 +162,15 @@ const calculatePrice = computed(() => {
             <el-input v-model="orderForm.phone" disabled />
         </el-form-item>
         <el-form-item label="坐席" prop="seat_type">
-            <el-select v-model="orderForm.seat_type" placeholder="" >
+            <el-select v-model="orderForm.seat_type" placeholder="">
                 <el-option v-if="name?.charAt(0) === 'G'" label="二等座" value="二等座" />
                 <el-option v-if="name?.charAt(0) === 'G'" label="一等座" value="一等座" />
                 <el-option v-if="name?.charAt(0) === 'G'" label="商务座" value="商务座" />
                 <el-option v-if="name?.charAt(0) === 'K'" value="软卧" label="软卧" />
-                <el-option v-if="name?.charAt(0) === 'K'" value="硬卧" label="硬卧"/>
+                <el-option v-if="name?.charAt(0) === 'K'" value="硬卧" label="硬卧" />
                 <el-option v-if="name?.charAt(0) === 'K'" value="软座" label="软座" />
                 <el-option v-if="name?.charAt(0) === 'K'" value="硬座" label="硬座" />
             </el-select>
-        </el-form-item>
-        <el-form-item label="价钱" >
-            <el-text>{{ calculatePrice }}</el-text>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitOrderForm(orderFormRef)">

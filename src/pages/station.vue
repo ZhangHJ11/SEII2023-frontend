@@ -6,9 +6,24 @@ import { ElNotification } from "element-plus";
 import { useStationsStore } from "~/stores/stations";
 import { useRouter } from "vue-router";
 import { StationInfo } from "~/utils/interfaces";
+import { useUserStore } from "~/stores/user";
 
 let stations = useStationsStore()
+const user = useUserStore()
 let router = useRouter()
+
+const checkAdmin = () => {
+  if (user.isAdmin === "用户") {
+    ElNotification({
+      offset: 70,
+      title: '权限不足',
+      message: h('warning', { style: 'color: teal' }, '权限不足，无法执行操作'),
+    })
+    router.push("/")
+  }
+}
+
+checkAdmin()
 
 let stationName = ref('')
 let stationsFiltered = reactive({

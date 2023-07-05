@@ -8,9 +8,24 @@ import TrainManageDetail from "~/components/TrainManageDetail.vue";
 import TrainManageForm from "~/components/TrainManageForm.vue";
 import { useRouter } from "vue-router";
 import { TrainInfo } from "~/utils/interfaces";
+import { useUserStore } from "~/stores/user";
 
 const router = useRouter()
 const stations = useStationsStore()
+const user = useUserStore()
+
+const checkAdmin = () => {
+  if (user.isAdmin === "用户") {
+    ElNotification({
+      offset: 70,
+      title: '权限不足',
+      message: h('warning', { style: 'color: teal' }, '权限不足，无法执行操作'),
+    })
+    router.push("/")
+  }
+}
+
+checkAdmin()
 
 let trainName = ref('')
 let trains = [] as TrainInfo[];

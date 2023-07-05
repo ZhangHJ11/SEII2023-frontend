@@ -6,9 +6,10 @@ export const useUserStore = defineStore('user', {
         return {
             username: '',
             name: '',
-            type: '',
+            idType: '',
             idn: '',
-            phone: ''
+            phone: '',
+            isAdmin:''
         }
     },
     getters: {
@@ -24,9 +25,22 @@ export const useUserStore = defineStore('user', {
             }).then((res) => {
                 this.username = res.data.data.username;
                 this.name = res.data.data.name;
-                this.type = res.data.data.type;
+                if(res.data.data.id_type === 0){
+                    this.idType = "身份证";
+                }else if(res.data.data.id_type === 1){
+                    this.idType = "护照";
+                }else{
+                    this.idType = "其它";
+                }
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
+                console.log("11111111111111111111111111111111111111111111111111111111111111111");
+                console.log(res.data.data.is_admin);
+                if(res.data.data.is_admin != 0){
+                    this.isAdmin = "管理员";
+                }else{
+                    this.isAdmin = "用户";
+                }
             }).catch((err) => {
                 console.log(err)
             })

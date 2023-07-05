@@ -6,9 +6,24 @@ import { useStationsStore } from "~/stores/stations";
 import { Right } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { RouteInfo } from "~/utils/interfaces";
+import { useUserStore } from "~/stores/user";
 
 const router = useRouter()
 const stations = useStationsStore()
+const user = useUserStore()
+
+const checkAdmin = () => {
+  if (user.isAdmin === "用户") {
+    ElNotification({
+      offset: 70,
+      title: '权限不足',
+      message: h('warning', { style: 'color: teal' }, '权限不足，无法执行操作'),
+    })
+    router.push("/")
+  }
+}
+
+checkAdmin()
 
 let routeName = ref('')
 let route_detail_form = ref()
