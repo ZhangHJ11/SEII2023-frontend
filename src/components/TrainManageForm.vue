@@ -16,7 +16,13 @@ const props = defineProps({
   extra_infos: Array,
   train_type: String,
   price: Number,
-  seat_num: Number
+  seat_num: Number,
+  business_seat_num: Number,
+    first_class_seat_num: Number,
+    second_class_seat_num: Number,
+    soft_sleep_num: Number,
+    hard_sleep_num: Number,
+    hard_seat_num: Number,
 })
 
 
@@ -32,7 +38,13 @@ let train = reactive({
   arrival_times: props.arrival_times as Array<string>,
   extra_infos: props.extra_infos as Array<string>,
   price: props.price,
-  seat_num: props.seat_num
+  seat_num: props.seat_num,
+    business_seat_num: props.business_seat_num,
+    first_class_seat_num: props.first_class_seat_num,
+    second_class_seat_num: props.second_class_seat_num,
+    soft_sleep_num: props.soft_sleep_num,
+    hard_sleep_num: props.hard_sleep_num,
+    hard_seat_num: props.hard_seat_num,
 })
 let route = reactive({
   id: 0,
@@ -159,20 +171,31 @@ getRoute()
         </el-form-item>
       </el-col>
 
-      <el-col :span="7" :offset="1">
-        <el-form-item style="display: flex">
-          <template #label>
-            <el-text tag="b" type="primary">
-              座位数量
-            </el-text>
-          </template>
-          <el-input v-model="train.seat_num" />
-        </el-form-item>
-      </el-col>
+        <el-col :span="7" :offset="1">
+            <el-form-item style="display: flex">
+                <template #label>
+                    <el-text tag="b" type="primary">
+                        座位数量
+                    </el-text>
+                </template>
+                <!-- Display different input fields based on the selected train_type -->
+                <template v-if="train.train_type === '高铁'">
+                    <el-input v-model="train.business_seat_num" placeholder="商务座数量" />
+                    <el-input v-model="train.first_class_seat_num" placeholder="一等座数量" />
+                    <el-input v-model="train.second_class_seat_num" placeholder="二等座数量" />
+                </template>
+                <template v-else-if="train.train_type === '普通列车'">
+                    <el-input v-model="train.soft_sleep_num" placeholder="软卧数量" />
+                    <el-input v-model="train.hard_sleep_num" placeholder="硬卧数量" />
+                    <el-input v-model="train.hard_seat_num" placeholder="硬座数量" />
+                </template>
+            </el-form-item>
+        </el-col>
     </el-row>
 
 
-    <div v-for="(station, index) in route.station_ids" :key="station">
+
+      <div v-for="(station, index) in route.station_ids" :key="station">
       <el-card style="margin-bottom: 0.25%" shadow="hover" class="container">
         <div style="display: flex; align-items: center;">
           <el-icon class="handle" size="large">

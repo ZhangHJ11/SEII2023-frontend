@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import { h, reactive, ref, watch } from "vue";
-import { useUserStore } from "~/stores/user";
-import { ElNotification, FormInstance } from "element-plus";
-import { request } from "~/utils/request";
 import { AxiosError, AxiosResponse } from "axios";
+import { ElNotification, FormInstance } from "element-plus";
+import { h, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "~/stores/user";
+import { request } from "~/utils/request";
 
 const user = useUserStore()
 const router = useRouter()
@@ -18,7 +18,8 @@ let form = reactive({
   type: '',
   idn: '',
   phone: '',
-  isAdmin:''
+  isAdmin: '',
+  points: 0,
 });
 
 const setForm = async () => {
@@ -28,6 +29,7 @@ const setForm = async () => {
   form.idn = user.idn;
   form.phone = user.phone;
   form.isAdmin = user.isAdmin;
+  form.points = user.points;
 }
 
 watch(user, () => {
@@ -74,6 +76,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         type: form.type,
         idn: form.idn,
         phone: form.phone,
+        points: form.points,
       }
     })
 
@@ -137,6 +140,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
       <el-form-item label="身份类型" prop="isAdmin">
         <el-input v-model="form.isAdmin" style="width: 25vh" :disabled="!edit" />
+      </el-form-item>
+      <el-form-item label="积分" prop="points">
+        <el-input v-model="form.points" style="width: 25vh" :disabled="true" />
       </el-form-item>
     </el-form>
   </div>
