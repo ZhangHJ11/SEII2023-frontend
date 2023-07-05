@@ -90,7 +90,11 @@ const pay = (id: number) => {
             message: h('success', { style: 'color: teal' }, res.data.msg),
         })
         getOrderDetail()
+        // TODO：在pay中跳转，只要改一下顺序这里就不会先显示完成，再跳转支付宝
+        console.log("---from patchOrder---")
         console.log(res)
+        console.log(res.data.data)
+        window.location.href=res.data.data;
     }).catch((error) => {
         if (error.response?.data.code == 100003) {
             router.push('/login')
@@ -235,7 +239,7 @@ getOrderDetail()
                 <el-button type="danger" @click="cancel(id ?? -1)">
                     取消订单
                 </el-button>
-                <el-button type="primary" @click="generateOrder(), pay(id ?? -1)">
+                <el-button type="primary" @click="pay(id ?? -1)">
                     支付订单
                 </el-button>
             </div>
