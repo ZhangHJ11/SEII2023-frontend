@@ -19,13 +19,13 @@ const props = defineProps({
     arrival_time: Number,
     duration: String,
     money: Number,
-    ticket_info: Array as PropType<TicketInfo[]>
+    ticket_info: Array as PropType<TicketInfo[]>,
+    train_type: String
 })
 
 const stations = useStationsStore()
 const user = useUserStore()
 const router = useRouter()
-
 
 const orderFormRef = ref<FormInstance>()
 let orderForm = reactive({
@@ -97,7 +97,6 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
     })
 }
 
-
 </script>
 
 <template>
@@ -165,13 +164,18 @@ const submitOrderForm = (formEl: FormInstance | undefined) => {
         </el-form-item>
         <el-form-item label="坐席" prop="seat_type">
             <el-select v-model="orderForm.seat_type" placeholder="">
-                <el-option v-if="name?.charAt(0) === 'G'" label="二等座" value="二等座" />
-                <el-option v-if="name?.charAt(0) === 'G'" label="一等座" value="一等座" />
-                <el-option v-if="name?.charAt(0) === 'G'" label="商务座" value="商务座" />
-                <el-option v-if="name?.charAt(0) === 'K'" value="软卧" label="软卧" />
-                <el-option v-if="name?.charAt(0) === 'K'" value="硬卧" label="硬卧" />
-                <el-option v-if="name?.charAt(0) === 'K'" value="软座" label="软座" />
-                <el-option v-if="name?.charAt(0) === 'K'" value="硬座" label="硬座" />
+                <template v-if="props.train_type === 'HIGH_SPEED'">
+                    <el-option label="商务座" value="商务座" />
+                    <el-option label="一等座" value="一等座" />
+                    <el-option label="二等座" value="二等座" />
+                </template>
+                <template v-if="props.train_type === 'NORMAL_SPEED'">
+                    <el-option value="软卧" label="软卧" />
+                    <el-option value="硬卧" label="硬卧" />
+                    <el-option value="软座" label="软座" />
+                    <el-option value="硬座" label="硬座" />
+                </template>
+
             </el-select>
         </el-form-item>
         <el-form-item>

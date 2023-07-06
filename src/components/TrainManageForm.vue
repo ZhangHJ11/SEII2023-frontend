@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {SwitchFilled} from "@element-plus/icons-vue";
-import {ElNotification} from "element-plus";
-import {h, reactive, ref, watch} from 'vue';
-import {useRouter} from "vue-router";
-import {useStationsStore} from "~/stores/stations";
-import {RouteInfo, TicketInfo} from '~/utils/interfaces';
-import {request} from "~/utils/request";
+import { SwitchFilled } from "@element-plus/icons-vue";
+import { ElNotification } from "element-plus";
+import { h, reactive, ref, watch } from 'vue';
+import { useRouter } from "vue-router";
+import { useStationsStore } from "~/stores/stations";
+import { RouteInfo, TicketInfo } from '~/utils/interfaces';
+import { request } from "~/utils/request";
 
 const props = defineProps({
   name: String,
@@ -61,7 +61,7 @@ let train = reactive({
   hard_sleep_num: props.hard_sleep_num,
 })
 
-if (train.ticket_infos.length === 0) train.ticket_infos = new Array<TicketInfo>(4).fill({count: 0, price: 0, type: ""})
+if (train.ticket_infos.length === 0) train.ticket_infos = new Array<TicketInfo>(4).fill({ count: 0, price: 0, type: "" })
 console.log(train.ticket_infos)
 // if (train.train_type === "高铁") {
 //   train.ticket_infos = [{
@@ -119,7 +119,7 @@ const getRoutes = () => {
     ElNotification({
       offset: 70,
       title: 'getRoutes错误(trainManage)',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
     console.log(error)
   })
@@ -144,7 +144,7 @@ const getRoute = () => {
     ElNotification({
       offset: 70,
       title: 'getRoute错误(trainManage)',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
     console.log(error)
   })
@@ -159,15 +159,15 @@ watch(() => train.route_id, () => {
 getRoute()
 
 function updateTicketPrice(value: number, id: number) {
-    // value是价格，id是数组的下表
-    train.ticket_infos[id].price = value;
-    console.log(train.ticket_infos[id].price);
+  // value是价格，id是数组的下表
+  train.ticket_infos[id].price = value;
+  console.log(train.ticket_infos[id].price);
 }
 
 function updateTicketNumber(value: number, id: number) {
-    // value是数量，id是数组的下表
-    train.ticket_infos[id].count = value;
-    console.log(train.ticket_infos[id].count);
+  // value是数量，id是数组的下表
+  train.ticket_infos[id].count = value;
+  console.log(train.ticket_infos[id].count);
 }
 
 </script>
@@ -182,7 +182,7 @@ function updateTicketNumber(value: number, id: number) {
               车次名
             </el-text>
           </template>
-          <el-input v-model="train.name"/>
+          <el-input v-model="train.name" />
         </el-form-item>
       </el-col>
       <el-col :span="7" :offset="1">
@@ -193,7 +193,7 @@ function updateTicketNumber(value: number, id: number) {
             </el-text>
           </template>
           <el-select v-model="train.train_type" style="display: flex; flex-grow: 1">
-            <el-option v-for="type in ['高铁', '普通列车']" :key="type" :label="type" :value="type"/>
+            <el-option v-for="type in ['高铁', '普通列车']" :key="type" :label="type" :value="type" />
           </el-select>
         </el-form-item>
       </el-col>
@@ -205,7 +205,7 @@ function updateTicketNumber(value: number, id: number) {
             </el-text>
           </template>
           <el-date-picker v-model="train.date" value-format="YYYY-MM-DD" :clearable="false"
-                          style="display: flex; flex-grow: 1"/>
+            style="display: flex; flex-grow: 1" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -220,66 +220,80 @@ function updateTicketNumber(value: number, id: number) {
           </template>
           <el-select v-model="train.route_id" style="width: 100%">
             <el-option v-for="singleRoute in routes" :key="singleRoute.id" :label="singleRoute.name"
-                       :value="singleRoute.id"/>
+              :value="singleRoute.id" />
           </el-select>
         </el-form-item>
       </el-col>
     </el-row>
 
-      <el-row>
-          <el-col :span="7" :offset="0">
-              <el-form-item style="display: flex">
-                  <template #label>
-                      <el-text tag="b" type="primary">
-                          两站间价格
-                      </el-text>
-                  </template>
-                  <template v-if="train.train_type === '高铁'">
-<!--                      <el-input v-model="train.ticket_infos[0].price" placeholder="商务座价格"/>-->
-                      <el-input v-model="train.business_seat_price" @change="updateTicketPrice(<number>train.business_seat_price,0)" placeholder="商务座价格"/>
-                      <el-input v-model="train.first_class_seat_price" @change="updateTicketPrice(<number>train.first_class_seat_price,1)" placeholder="一等座价格"/>
-                      <el-input v-model="train.second_class_seat_price" @change="updateTicketPrice(<number>train.second_class_seat_price,2)" placeholder="二等座价格"/>
-                  </template>
-                  <template v-else-if="train.train_type === '普通列车'">
-                      <el-input v-model="train.soft_sleep_price" @change="updateTicketPrice(<number>train.soft_sleep_price,0)" placeholder="软卧价格"/>
-                      <el-input v-model="train.hard_sleep_price" @change="updateTicketPrice(<number>train.hard_sleep_price,1)" placeholder="硬卧价格"/>
-                      <el-input v-model="train.soft_seat_price" @change="updateTicketPrice(<number>train.soft_seat_price,2)" placeholder="软座价格"/>
-                      <el-input v-model="train.hard_seat_price" @change="updateTicketPrice(<number>train.hard_seat_price,3)" placeholder="硬座价格"/>
-                  </template>
-              </el-form-item>
-          </el-col>
-      </el-row>
+    <el-row>
+      <el-col :span="7" :offset="0">
+        <el-form-item style="display: flex">
+          <template #label>
+            <el-text tag="b" type="primary">
+              两站间价格
+            </el-text>
+          </template>
+          <template v-if="train.train_type === '高铁'">
+            <!--                      <el-input v-model="train.ticket_infos[0].price" placeholder="商务座价格"/>-->
+            <el-input v-model="train.business_seat_price"
+              @change="updateTicketPrice(<number>train.business_seat_price, 0)" placeholder="商务座价格" />
+            <el-input v-model="train.first_class_seat_price"
+              @change="updateTicketPrice(<number>train.first_class_seat_price, 1)" placeholder="一等座价格" />
+            <el-input v-model="train.second_class_seat_price"
+              @change="updateTicketPrice(<number>train.second_class_seat_price, 2)" placeholder="二等座价格" />
+          </template>
+          <template v-else-if="train.train_type === '普通列车'">
+            <el-input v-model="train.soft_sleep_price" @change="updateTicketPrice(<number>train.soft_sleep_price, 0)"
+              placeholder="软卧价格" />
+            <el-input v-model="train.hard_sleep_price" @change="updateTicketPrice(<number>train.hard_sleep_price, 1)"
+              placeholder="硬卧价格" />
+            <el-input v-model="train.soft_seat_price" @change="updateTicketPrice(<number>train.soft_seat_price, 2)"
+              placeholder="软座价格" />
+            <el-input v-model="train.hard_seat_price" @change="updateTicketPrice(<number>train.hard_seat_price, 3)"
+              placeholder="硬座价格" />
+          </template>
+        </el-form-item>
+      </el-col>
+    </el-row>
 
-      <el-row>
-          <el-col :span="7" :offset="0">
-              <el-form-item style="display: flex">
-                  <template #label>
-                      <el-text tag="b" type="primary">
-                          座位数量
-                      </el-text>
-                  </template>
-                  <!-- Display different input fields based on the selected train_type -->
-                  <template v-if="train.train_type === '高铁'">
-                      <el-input v-model="train.business_seat_num" @change="updateTicketNumber(<number>train.business_seat_num,0)" placeholder="商务座数量"/>
-                      <el-input v-model="train.first_class_seat_num" @change="updateTicketNumber(<number>train.first_class_seat_num,1)" placeholder="一等座数量"/>
-                      <el-input v-model="train.second_class_seat_num" @change="updateTicketNumber(<number>train.second_class_seat_num,2)" placeholder="二等座数量"/>
-                  </template>
-                  <template v-else-if="train.train_type === '普通列车'">
-                      <el-input v-model="train.soft_sleep_num" @change="updateTicketNumber(<number>train.soft_sleep_num,0)" placeholder="软卧数量"/>
-                      <el-input v-model="train.hard_sleep_num" @change="updateTicketNumber(<number>train.hard_sleep_num,1)" placeholder="硬卧数量"/>
-                      <el-input v-model="train.soft_seat_num" @change="updateTicketNumber(<number>train.soft_seat_num,2)" placeholder="软座数量"/>
-                      <el-input v-model="train.hard_seat_num" @change="updateTicketNumber(<number>train.hard_seat_num,3)" placeholder="硬座数量"/>
-                  </template>
-              </el-form-item>
-          </el-col>
-      </el-row>
+    <el-row>
+      <el-col :span="7" :offset="0">
+        <el-form-item style="display: flex">
+          <template #label>
+            <el-text tag="b" type="primary">
+              座位数量
+            </el-text>
+          </template>
+          <!-- Display different input fields based on the selected train_type -->
+          <template v-if="train.train_type === '高铁'">
+            <el-input v-model="train.business_seat_num" @change="updateTicketNumber(<number>train.business_seat_num, 0)"
+              placeholder="商务座数量" />
+            <el-input v-model="train.first_class_seat_num"
+              @change="updateTicketNumber(<number>train.first_class_seat_num, 1)" placeholder="一等座数量" />
+            <el-input v-model="train.second_class_seat_num"
+              @change="updateTicketNumber(<number>train.second_class_seat_num, 2)" placeholder="二等座数量" />
+          </template>
+          <template v-else-if="train.train_type === '普通列车'">
+            <el-input v-model="train.soft_sleep_num" @change="updateTicketNumber(<number>train.soft_sleep_num, 0)"
+              placeholder="软卧数量" />
+            <el-input v-model="train.hard_sleep_num" @change="updateTicketNumber(<number>train.hard_sleep_num, 1)"
+              placeholder="硬卧数量" />
+            <el-input v-model="train.soft_seat_num" @change="updateTicketNumber(<number>train.soft_seat_num, 2)"
+              placeholder="软座数量" />
+            <el-input v-model="train.hard_seat_num" @change="updateTicketNumber(<number>train.hard_seat_num, 3)"
+              placeholder="硬座数量" />
+          </template>
+        </el-form-item>
+      </el-col>
+    </el-row>
 
 
     <div v-for="(station, index) in route.station_ids" :key="station">
       <el-card style="margin-bottom: 0.25%" shadow="hover" class="container">
         <div style="display: flex; align-items: center;">
           <el-icon class="handle" size="large">
-            <SwitchFilled/>
+            <SwitchFilled />
           </el-icon>
           <strong style="margin-left: 5%; margin-right: 5%">
             {{ index + 1 }}
@@ -289,14 +303,12 @@ function updateTicketNumber(value: number, id: number) {
           </div>
 
           <el-date-picker style="width: 50%; margin-right: 1%" :disabled="index === 0"
-                          @change="() => { if (index === route.station_ids.length - 1) { train.departure_times[index] = train.arrival_times[index] } }"
-                          v-model="train.arrival_times[index]" type="datetime" placeholder="到点"
-                          format="YY/MM/DD HH:mm"/>
+            @change="() => { if (index === route.station_ids.length - 1) { train.departure_times[index] = train.arrival_times[index] } }"
+            v-model="train.arrival_times[index]" type="datetime" placeholder="到点" format="YY/MM/DD HH:mm" />
 
           <el-date-picker style="width: 50%" :disabled="index === route.station_ids.length - 1"
-                          @change="() => { if (index === 0) { train.arrival_times[0] = train.departure_times[0] } }"
-                          v-model="train.departure_times[index]" type="datetime" placeholder="开点"
-                          format="YY/MM/DD HH:mm"/>
+            @change="() => { if (index === 0) { train.arrival_times[0] = train.departure_times[0] } }"
+            v-model="train.departure_times[index]" type="datetime" placeholder="开点" format="YY/MM/DD HH:mm" />
         </div>
       </el-card>
     </div>

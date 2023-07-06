@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { SwitchFilled } from '@element-plus/icons-vue';
 import { PropType, ref } from "vue";
-import { SwitchFilled } from '@element-plus/icons-vue'
-import { useStationsStore } from "~/stores/stations";
-import { calDuration, parseDate } from "~/utils/date";
-import { useUserStore } from "~/stores/user";
 import { useRouter } from "vue-router";
+import { useStationsStore } from "~/stores/stations";
+import { useUserStore } from "~/stores/user";
+import { calDuration, parseDate } from "~/utils/date";
 import { TicketInfo } from "~/utils/interfaces";
 
 const props = defineProps({
@@ -14,7 +14,8 @@ const props = defineProps({
   end_station_id: Number,
   departure_time: Number,
   arrival_time: Number,
-  ticket_info: Array as PropType<TicketInfo[]>
+  ticket_info: Array as PropType<TicketInfo[]>,
+  train_type: String
 })
 
 const router = useRouter()

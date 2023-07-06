@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
-import {Right, SwitchFilled} from "@element-plus/icons-vue";
-import {h, reactive, watch} from "vue";
-import {request} from "~/utils/request";
-import {useStationsStore} from "~/stores/stations";
-import {ElNotification} from "element-plus";
-import {parseDate} from "~/utils/date";
-import {useRouter} from "vue-router";
+import { Right, SwitchFilled } from "@element-plus/icons-vue";
+import { ElNotification } from "element-plus";
+import { h, reactive, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useStationsStore } from "~/stores/stations";
+import { parseDate } from "~/utils/date";
+import { request } from "~/utils/request";
 
 const props = defineProps({
   id: Number,
@@ -44,7 +44,7 @@ const getRoute = () => {
     ElNotification({
       offset: 70,
       title: 'getRoute错误(trainManage)',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
     console.log(error)
   })
@@ -64,8 +64,8 @@ getRoute()
     {{ route.name }}
   </el-text>
 
-  <br/>
-  <br/>
+  <br />
+  <br />
 
   <el-row justify="center" class="el-row">
     <el-col :span="11" style="display: flex; justify-content: right; align-items: center">
@@ -75,7 +75,7 @@ getRoute()
     </el-col>
     <el-col :span="2" style="display: flex; justify-content: center; align-items: center">
       <el-icon size="15">
-        <Right/>
+        <Right />
       </el-icon>
     </el-col>
     <el-col :span="11" style="display: flex; justify-content: left; align-items: center;">
@@ -91,7 +91,7 @@ getRoute()
         {{ parseDate(departure_times?.[0] as string) }}
       </el-text>
     </el-col>
-    <el-col :span="2"/>
+    <el-col :span="2" />
     <el-col :span="11" style="display: flex; justify-content: left; align-items: center">
       <el-text>
         {{ parseDate(props.arrival_times?.[props.arrival_times?.length - 1] as string) }}
@@ -99,13 +99,13 @@ getRoute()
     </el-col>
   </el-row>
 
-  <br/>
+  <br />
 
   <el-card shadow="hover" v-for="(stationId, index) in route.station_ids" style="margin-bottom: 0.35%">
     <div style="display: flex; align-items: center">
       <el-space :size="50" style="width: 50%">
         <el-icon size="large">
-          <SwitchFilled/>
+          <SwitchFilled />
         </el-icon>
         <strong>
           {{ index + 1 }}
