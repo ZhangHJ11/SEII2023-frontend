@@ -8,9 +8,11 @@ import { parseDate } from "~/utils/date";
 import { useRouter } from "vue-router";
 import { OrderDetailData } from "~/utils/interfaces";
 import axios from "axios";
+import {useUserStore} from "~/stores/user";
 
 const router = useRouter()
 const stations = useStationsStore()
+const user = useUserStore()
 
 const props = defineProps({
     id: Number,
@@ -29,6 +31,7 @@ let orderDetail = reactive<{ data: OrderDetailData }>({
         arrival_time: '',
         money: 0,
     },
+
 })
 
 let train = reactive<{ data: { name?: string } }>({
@@ -107,6 +110,47 @@ const pay = (id: number) => {
         console.log(error)
     })
 }
+
+const payWithPoints = (id: number) => {
+    const pointsNeeded = orderDetail.data.money * 10;
+    if(user.points < pointsNeeded){
+        //积分不足
+        ElNotification({
+            offset: 70,
+            title: '积分不足',
+            message: h('error', {style: 'color: teal'}, '您的积分不足，无法进行积分支付。'),
+        });
+        return;
+    }
+    request({
+        url: `/order/${id}`,
+        method: 'PATCH',
+        data: {
+            status: '已支付',
+        },
+    })
+        .then((res) => {
+        ElNotification({
+            offset: 70,
+            title: '支付成功',
+            message: h('success', {style: 'color:teal'},res.data.msg),
+        });
+            getOrderDetail();
+            // 扣除积分
+            user.points = (user.points - pointsNeeded);
+        })
+        .catch((error) => {
+            if (error.response?.data.code == 100003) {
+                router.push('/login');
+            }
+            ElNotification({
+                offset: 70,
+                title: '支付失败',
+                message: h('error', { style: 'color: teal' }, error.response?.data.msg),
+            });
+            console.log(error);
+        });
+};
 
 const cancel = (id: number) => {
     request({
@@ -240,7 +284,10 @@ getOrderDetail()
                     取消订单
                 </el-button>
                 <el-button type="primary" @click="pay(id ?? -1)">
-                    支付订单
+                    直接支付
+                </el-button>
+                <el-button type="primary" @click="payWithPoints(id ?? -1)">
+                    积分支付
                 </el-button>
             </div>
         </div>
