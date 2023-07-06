@@ -1,12 +1,13 @@
 <script setup lang="ts">
 
-import { computed, onMounted, reactive, ref } from "vue";
+import {h, onMounted, reactive, ref} from "vue";
 import { request } from "~/utils/request";
 import { parseDate } from "~/utils/date";
 import { Right } from "@element-plus/icons-vue";
 import { useStationsStore } from "~/stores/stations";
 import { useRouter } from "vue-router";
 import { OrderDetailData } from "~/utils/interfaces";
+import {ElNotification} from "element-plus";
 
 let orders = reactive({
   data: [] as OrderDetailData[]
@@ -37,6 +38,36 @@ const getOrders = () => {
     console.log(error)
   })
 }
+
+const refund = (orderId) => {
+    request({
+        url: `/order/${orderId}`,
+        method: 'PATCH',
+        data: {
+            status: '已取消',
+        },
+    })
+        .then((res) => {
+            ElNotification({
+                offset: 70,
+                title: '退款成功',
+                message: h('success', { style: 'color: teal' }, res.data.msg),
+            });
+            getOrders();
+        })
+        .catch((error) => {
+            if (error.response?.data.code == 100003) {
+                router.push('/login');
+            }
+            ElNotification({
+                offset: 70,
+                title: '退款失败',
+                message: h('error', { style: 'color: teal' }, error.response?.data.msg),
+            });
+            console.log(error);
+        });
+};
+
 
 const getTrainName = (id: number) => {
   request({
@@ -137,6 +168,13 @@ onMounted(() => {
           </el-button>
         </el-col>
       </el-row>
+        <el-row>
+            <el-col :span="2" :offset="21">
+                <el-button type="primary" @click="refund(order.id)">
+                    退款
+                </el-button>
+            </el-col>
+        </el-row>
     </div>
 
 
