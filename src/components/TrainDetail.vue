@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { request } from "~/utils/request";
-import { computed, onMounted, reactive } from "vue";
 import { Right } from "@element-plus/icons-vue";
+import { computed, onMounted, reactive } from "vue";
 import { useStationsStore } from "~/stores/stations";
-import { parseDate } from "../utils/date";
 import { TrainDetailInfo } from "~/utils/interfaces";
+import { request } from "~/utils/request";
+import { parseDate } from "../utils/date";
 
 const props = defineProps({
   trainId: Number
