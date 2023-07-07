@@ -9,6 +9,7 @@ interface OrderDetailData {
     departure_time: string,
     arrival_time: string,
     money: number,
+    seat_type: string,
 }
 
 interface TicketInfo {

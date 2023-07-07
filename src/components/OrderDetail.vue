@@ -16,6 +16,7 @@ const user = useUserStore()
 
 const props = defineProps({
     id: Number,
+    type : Number,
 })
 
 let orderDetail = reactive<{ data: OrderDetailData }>({
@@ -30,6 +31,7 @@ let orderDetail = reactive<{ data: OrderDetailData }>({
         departure_time: '',
         arrival_time: '',
         money: 0,
+        seat_type: '',
     },
 
 })
@@ -79,12 +81,14 @@ const getTrain = () => {
 }
 
 
-const pay = (id: number) => {
+const pay = (id: number,payType: number) => {
+    console.log(payType);
     request({
         url: `/order/${id}`,
         method: 'PATCH',
         data: {
-            status: '已支付'
+            status: '已支付',
+            payType: payType, //支付类型
         }
     }).then((res) => {
         ElNotification({
@@ -111,7 +115,8 @@ const pay = (id: number) => {
     })
 }
 
-const payWithPoints = (id: number) => {
+const payWithPoints = (id: number,payType: number) => {
+    console.log("points" + payType);
     const pointsNeeded = orderDetail.data.money * 10;
     if(user.points < pointsNeeded){
         //积分不足
@@ -127,6 +132,7 @@ const payWithPoints = (id: number) => {
         method: 'PATCH',
         data: {
             status: '已支付',
+            payType: payType,
         },
     })
         .then((res) => {
@@ -137,7 +143,7 @@ const payWithPoints = (id: number) => {
         });
             getOrderDetail();
             // 扣除积分
-            user.points = (user.points - pointsNeeded);
+            // user.points = (user.points - pointsNeeded);
         })
         .catch((error) => {
             if (error.response?.data.code == 100003) {
@@ -157,7 +163,8 @@ const cancel = (id: number) => {
         url: `/order/${id}`,
         method: 'PATCH',
         data: {
-            status: '已取消'
+            status: '已取消',
+            payType: 0
         }
     }).then((res) => {
         ElNotification({
@@ -261,6 +268,9 @@ getOrderDetail()
             <el-descriptions-item label="席位信息" :span="2" width="25%" align="center" v-if="orderDetail.data">
                 {{ orderDetail.data.seat }}
             </el-descriptions-item>
+            <el-descriptions-item label="座位类型" :span="2" width="25%" align="center" v-if="orderDetail.data">
+                {{ orderDetail.data.seat_type }}
+            </el-descriptions-item>
             <el-descriptions-item label="价格" :span="2" width="25%" align="center" v-if="orderDetail.data">
                 {{ orderDetail.data.money }}
             </el-descriptions-item>
@@ -283,10 +293,10 @@ getOrderDetail()
                 <el-button type="danger" @click="cancel(id ?? -1)">
                     取消订单
                 </el-button>
-                <el-button type="primary" @click="pay(id ?? -1)">
+                <el-button type="primary" @click="pay(id ?? -1,1)">
                     直接支付
                 </el-button>
-                <el-button type="primary" @click="payWithPoints(id ?? -1)">
+                <el-button type="primary" @click="payWithPoints(id ?? -1,2)">
                     积分支付
                 </el-button>
             </div>

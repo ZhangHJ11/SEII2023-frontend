@@ -45,6 +45,7 @@ const refund = (orderId) => {
         method: 'PATCH',
         data: {
             status: '已取消',
+            payType: 0,
         },
     })
         .then((res) => {
