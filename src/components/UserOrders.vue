@@ -169,13 +169,13 @@ onMounted(() => {
           </el-button>
         </el-col>
       </el-row>
-        <el-row>
-            <el-col :span="2" :offset="21">
-                <el-button type="primary" @click="refund(order.id)">
-                    退款
-                </el-button>
-            </el-col>
-        </el-row>
+<!--        <el-row>-->
+<!--            <el-col :span="2" :offset="21">-->
+<!--                <el-button type="primary" @click="refund(order.id)">-->
+<!--                    退款-->
+<!--                </el-button>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
     </div>
 
 
