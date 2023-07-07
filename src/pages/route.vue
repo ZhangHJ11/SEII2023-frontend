@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { h, onMounted, reactive, ref } from "vue";
-import { request } from "~/utils/request";
-import { ElNotification } from "element-plus";
-import { useStationsStore } from "~/stores/stations";
 import { Right } from "@element-plus/icons-vue";
+import { ElNotification } from "element-plus";
+import { h, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { RouteInfo } from "~/utils/interfaces";
+import { useStationsStore } from "~/stores/stations";
 import { useUserStore } from "~/stores/user";
+import { RouteInfo } from "~/utils/interfaces";
+import { request } from "~/utils/request";
 
 const router = useRouter()
 const stations = useStationsStore()
 const user = useUserStore()
 
 const checkAdmin = () => {
-  if (user.isAdmin === "用户") {
+  if (user.admin === "用户") {
     ElNotification({
       offset: 70,
       title: '权限不足',

@@ -15,20 +15,20 @@ let edit = ref(false);
 let form = reactive({
   username: '',
   name: '',
-  type: '',
+  id_type: '',
   idn: '',
   phone: '',
-  isAdmin: '',
+  admin: '',
   points: 0,
 });
 
 const setForm = async () => {
   form.username = user.username;
   form.name = user.name;
-  form.type = user.idType;
+  form.id_type = user.id_type;
   form.idn = user.idn;
   form.phone = user.phone;
-  form.isAdmin = user.isAdmin;
+  form.admin = user.admin;
   form.points = user.points;
 }
 
@@ -52,7 +52,7 @@ const rules = reactive({
   idn: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
     pattern: /^\d{17}(\d|X)$/, message: '身份证号码不符合要求', trigger: 'change'
   }],
-  type: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
+  id_type: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
     pattern: /^(身份证|护照|其他)$/, message: '证件类型不符合要求', trigger: 'change'
   }],
   phone: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
@@ -66,6 +66,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (!valid) return
 
     console.log('submit!')
+    console.log(form.id_type)
+    let t = 0;
+    if (form.id_type === "身份证") {
+      t = 0;
+    } else if (form.id_type === "护照") {
+      t = 1;
+    } else {
+      t = 2;
+    }
 
     const r = request({
       url: '/user',
@@ -73,7 +82,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       data: {
         username: form.username,
         name: form.name,
-        type: form.type,
+        id_type: t,
         idn: form.idn,
         phone: form.phone,
         points: form.points,
@@ -124,7 +133,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         <el-input v-model="form.name" style="width: 25vh" :disabled="!edit" />
       </el-form-item>
       <el-form-item label="证件类型" prop="type">
-        <el-select v-model="form.type" placeholder=" " style="width: 25vh" :disabled="!edit">
+        <el-select v-model="form.id_type" placeholder=" " style="width: 25vh" :disabled="!edit">
           <el-option value="身份证" />
           <el-option value="护照" />
           <el-option value="其他" />
@@ -138,8 +147,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
         <el-input v-model="form.phone" style="width: 25vh" :disabled="!edit" />
       </el-form-item>
 
-      <el-form-item label="身份类型" prop="isAdmin">
-        <el-input v-model="form.isAdmin" style="width: 25vh" :disabled="!edit" />
+      <el-form-item label="身份类型" prop="admin">
+        <el-input v-model="form.admin" style="width: 25vh" :disabled="true" />
       </el-form-item>
       <el-form-item label="积分" prop="points">
         <el-input v-model="form.points" style="width: 25vh" :disabled="true" />

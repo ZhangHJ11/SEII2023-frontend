@@ -1,26 +1,25 @@
 <script setup lang="ts">
 
-import {ElMessage, ElNotification} from "element-plus";
-import {h, onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
+import { ElMessage, ElNotification } from "element-plus";
+import { h, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import TrainManageDetail from "~/components/TrainManageDetail.vue";
 import TrainManageForm from "~/components/TrainManageForm.vue";
-import {useStationsStore} from "~/stores/stations";
-import {useUserStore} from "~/stores/user";
-import {TrainInfo} from "~/utils/interfaces";
-import {request} from "~/utils/request";
-import {toByte, toByteArray} from "~/utils/ticket"
+import { useStationsStore } from "~/stores/stations";
+import { useUserStore } from "~/stores/user";
+import { TrainInfo } from "~/utils/interfaces";
+import { request } from "~/utils/request";
 
 const router = useRouter()
 const stations = useStationsStore()
 const user = useUserStore()
 
 const checkAdmin = () => {
-  if (user.isAdmin === "用户") {
+  if (user.admin === "用户") {
     ElNotification({
       offset: 70,
       title: '权限不足',
-      message: h('warning', {style: 'color: teal'}, '权限不足，无法执行操作'),
+      message: h('warning', { style: 'color: teal' }, '权限不足，无法执行操作'),
     })
     router.push("/")
   }
@@ -87,7 +86,7 @@ const addTrain = (train: TrainInfo) => {
       arrival_times: train.arrival_times,
       extra_infos: train.extra_infos,
       train_type: train.train_type,
-      ticket_infos:ticket_infos,
+      ticket_infos: ticket_infos,
       // ticket_infos: toByte(ticket_infos)
       // test: toByte(train.ticket_infos[0])
     }
@@ -95,7 +94,7 @@ const addTrain = (train: TrainInfo) => {
     ElNotification({
       offset: 70,
       title: '成功',
-      message: h('success', {style: 'color: teal'}, res.data.msg),
+      message: h('success', { style: 'color: teal' }, res.data.msg),
     })
     add.value = false
     trainName.value = ''
@@ -109,7 +108,7 @@ const addTrain = (train: TrainInfo) => {
     ElNotification({
       offset: 70,
       title: 'postTrain错误',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
   })
 }
@@ -122,7 +121,7 @@ const delTrain = (id: number) => {
     ElNotification({
       offset: 70,
       title: '成功',
-      message: h('success', {style: 'color: teal'}, res.data.msg),
+      message: h('success', { style: 'color: teal' }, res.data.msg),
     })
     trainName.value = ''
     refreshData()
@@ -135,7 +134,7 @@ const delTrain = (id: number) => {
     ElNotification({
       offset: 70,
       title: 'deleteTrain错误',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
   })
 }
@@ -164,7 +163,7 @@ const changeTrain = (train: TrainInfo) => {
     ElNotification({
       offset: 70,
       title: '成功',
-      message: h('success', {style: 'color: teal'}, res.data.msg),
+      message: h('success', { style: 'color: teal' }, res.data.msg),
     })
     change.value = false
     trainName.value = ''
@@ -178,7 +177,7 @@ const changeTrain = (train: TrainInfo) => {
     ElNotification({
       offset: 70,
       title: 'putTrain错误',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
   })
 }
@@ -199,7 +198,7 @@ const refreshData = () => {
     ElNotification({
       offset: 70,
       title: 'getTrain错误',
-      message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+      message: h('error', { style: 'color: teal' }, error.response?.data.msg),
     })
   })
 }
@@ -218,14 +217,14 @@ onMounted(() => {
 <template>
   <el-container>
     <el-header style="position: fixed; width: 100%; z-index: 999">
-      <MenuComponent pageIndex="/train"/>
+      <MenuComponent pageIndex="/train" />
     </el-header>
     <el-main style="margin-top: 8vh">
       <div style="display: flex; justify-content: center">
         <el-card shadow="hover" style="width: 70vh; height: auto; ">
           <el-form inline style="display: flex; " @submit.native.prevent>
             <el-form-item label="车次名" style="display: flex; flex-grow: 1">
-              <el-input v-model="trainName" autofocus @keyup.enter.native="filter"/>
+              <el-input v-model="trainName" autofocus @keyup.enter.native="filter" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="filter">
@@ -236,8 +235,8 @@ onMounted(() => {
         </el-card>
       </div>
 
-      <br/>
-      <br/>
+      <br />
+      <br />
 
       <div style="display: flex; justify-content: center">
         <div style="display: flex; width: 80vh; justify-content: flex-end">
@@ -249,8 +248,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <br/>
-      <br/>
+      <br />
+      <br />
 
       <div style="display: flex; justify-content: center">
         <el-collapse style="width: 80vh; display: flex;flex-direction: column;">
@@ -264,7 +263,7 @@ onMounted(() => {
               </el-button>
             </div>
             <div>
-              <TrainManageDetail v-bind="{ ...train, date: new Date(train.date) }"/>
+              <TrainManageDetail v-bind="{ ...train, date: new Date(train.date) }" />
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -274,17 +273,17 @@ onMounted(() => {
 
   <el-dialog v-model="change" title="更改车次" width="60%" draggable>
     <div>请输入更改后的车次信息</div>
-    <br/>
+    <br />
     <div>
-      <TrainManageForm v-bind="toChange" @formSubmitted="changeTrain" :key="toChange.id"/>
+      <TrainManageForm v-bind="toChange" @formSubmitted="changeTrain" :key="toChange.id" />
     </div>
   </el-dialog>
 
   <el-dialog v-model="add" title="添加车次" width="60%" draggable destroy-on-close>
     <div>请输入新的车次信息</div>
-    <br/>
+    <br />
     <div>
-      <TrainManageForm v-bind="toAdd" @formSubmitted="addTrain"/>
+      <TrainManageForm v-bind="toAdd" @formSubmitted="addTrain" />
     </div>
   </el-dialog>
 </template>

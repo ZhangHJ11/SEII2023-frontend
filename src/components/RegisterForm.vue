@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {h, reactive, ref} from 'vue'
-import type {FormInstance, FormRules} from 'element-plus'
-import {ElNotification} from "element-plus"
-import {request} from "~/utils/request"
-import {AxiosError, AxiosResponse} from 'axios';
-import {useRouter} from "vue-router";
+import { AxiosError, AxiosResponse } from 'axios';
+import type { FormInstance, FormRules } from 'element-plus';
+import { ElNotification } from "element-plus";
+import { h, reactive, ref } from 'vue';
+import { useRouter } from "vue-router";
+import { request } from "~/utils/request";
 
 const router = useRouter();
 
@@ -24,20 +24,20 @@ const ruleForm = reactive({
     password: '',
     checkPass: '',
     name: '',
-    idType: '身份证',
+    id_type: '身份证',
     idn: '',
     phone: '',
     rick: false,
-    isAdmin: '用户',
+    admin: '用户',
 })
 
 const rules = reactive<FormRules>({
-    username: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    username: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         min: 4, max: 16, message: '用户名长度不符合要求(4-16)', trigger: 'change'
     }, {
         pattern: /^[a-z\d-_]*$/, message: '用户名只能包含小写字母,数字,下划线和连字符', trigger: 'change'
     }],
-    password: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    password: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         min: 8, max: 56, message: '密码长度不符合要求(8-56)', trigger: 'change'
     }, {
         pattern: /^[\x21-\x7e]*$/, message: '密码只能包含字母,数字和符号', trigger: 'change'
@@ -46,25 +46,25 @@ const rules = reactive<FormRules>({
         message: '密码未达到复杂性要求:密码必须包含大小写字母和数字',
         trigger: 'change'
     }],
-    checkPass: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    checkPass: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         validator: validateCheckPass,
         trigger: 'change'
     }],
-    name: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    name: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         min: 2, max: 16, message: '姓名长度不符合要求(2-16)', trigger: 'change'
     }, {
         pattern: /^[\u4e00-\u9fa5]{2,16}$/, message: '姓名只能包含中文', trigger: 'change'
     }],
-    idn: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    idn: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         pattern: /^\d{17}(\d|X)$/, message: '身份证号码不符合要求', trigger: 'change'
     }],
-    idType: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    id_type: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         pattern: /^(身份证|护照|其他)$/, message: '证件类型不符合要求', trigger: 'change'
     }],
-    phone: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    phone: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         pattern: /^1[3456789]\d{9}$/, message: '手机号码不符合要求', trigger: 'change'
     }],
-    isAdmin: [{required: true, message: '此字段为必填项', trigger: 'change'}, {
+    admin: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
         pattern: /^(管理员|用户)$/, message: '身份不符合要求', trigger: 'change'
     }]
 })
@@ -76,8 +76,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
         console.log('submit!')
 
-        const isAdmin = ruleForm.isAdmin === "管理员"
-        const idType = (ruleForm.idType === "身份证" ? 0 : (ruleForm.idType === "护照" ? 1 : 2))
+        const admin = ruleForm.admin === "管理员"
+        const id_type = (ruleForm.id_type === "身份证" ? 0 : (ruleForm.id_type === "护照" ? 1 : 2))
 
         const r = request({
             url: '/user',
@@ -86,17 +86,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 username: ruleForm.username,
                 password: ruleForm.password,
                 name: ruleForm.name,
-                idType: idType,
+                id_type: id_type,
                 idn: ruleForm.idn,
                 phone: ruleForm.phone,
-                isAdmin: isAdmin,
+                admin: admin,
             }
         })
         r.then((response: AxiosResponse<any>) => {
             ElNotification({
                 offset: 70,
                 title: '注册成功',
-                message: h('info', {style: 'color: teal'}, response.data.msg),
+                message: h('info', { style: 'color: teal' }, response.data.msg),
             })
             router.push('/login')
         }).catch((error: AxiosError<any>) => {
@@ -104,7 +104,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             ElNotification({
                 offset: 70,
                 title: 'register错误',
-                message: h('error', {style: 'color: teal'}, error.response?.data.msg),
+                message: h('error', { style: 'color: teal' }, error.response?.data.msg),
             })
         })
     })
@@ -116,41 +116,41 @@ const submitForm = (formEl: FormInstance | undefined) => {
 <template>
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" label-width="120px">
         <el-form-item label="用户名" prop="username">
-            <el-input v-model="ruleForm.username" type="text"/>
+            <el-input v-model="ruleForm.username" type="text" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password" autocomplete="off" type="password"/>
+            <el-input v-model="ruleForm.password" autocomplete="off" type="password" />
         </el-form-item>
         <el-form-item label="密码确认" prop="checkPass">
-            <el-input v-model="ruleForm.checkPass" autocomplete="off" type="password"/>
+            <el-input v-model="ruleForm.checkPass" autocomplete="off" type="password" />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-            <el-input v-model="ruleForm.name" type="text"/>
+            <el-input v-model="ruleForm.name" type="text" />
         </el-form-item>
         <el-form-item label="证件类型" prop="type">
-            <el-select v-model="ruleForm.idType" placeholder=" ">
-                <el-option value="身份证"/>
-                <el-option value="护照"/>
-                <el-option value="其他"/>
+            <el-select v-model="ruleForm.id_type" placeholder=" ">
+                <el-option value="身份证" />
+                <el-option value="护照" />
+                <el-option value="其他" />
             </el-select>
         </el-form-item>
         <el-form-item label="证件号码" prop="idn">
-            <el-input v-model="ruleForm.idn" type="text"/>
+            <el-input v-model="ruleForm.idn" type="text" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-            <el-input v-model="ruleForm.phone"/>
+            <el-input v-model="ruleForm.phone" />
         </el-form-item>
-        <el-form-item label="身份类型" prop="isAdmin">
-            <el-select v-model="ruleForm.isAdmin" placeholder="用户">
-                <el-option value="管理员"/>
-                <el-option value="用户"/>
+        <el-form-item label="身份类型" prop="admin">
+            <el-select v-model="ruleForm.admin" placeholder="用户">
+                <el-option value="管理员" />
+                <el-option value="用户" />
             </el-select>
         </el-form-item>
         <el-form-item prop="rick">
             <el-checkbox v-model="ruleForm.rick">
                 <span>我已阅读并同意</span>
                 <el-link type="primary" href="https://www.bilibili.com/video/BV1GJ411x7h7/"
-                         target="_blank">《l23o6客户服务中心网站服务条款》
+                    target="_blank">《l23o6客户服务中心网站服务条款》
                 </el-link>
             </el-checkbox>
         </el-form-item>

@@ -30,7 +30,7 @@ const router = useRouter()
 const orderFormRef = ref<FormInstance>()
 let orderForm = reactive({
     name: user.name,
-    type: user.idType,
+    type: user.id_type,
     idn: user.idn,
     phone: user.phone,
     seat_type: ''

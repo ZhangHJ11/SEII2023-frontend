@@ -6,10 +6,10 @@ export const useUserStore = defineStore('user', {
         return {
             username: '',
             name: '',
-            idType: '',
+            id_type: '',
             idn: '',
             phone: '',
-            isAdmin: '',
+            admin: '',
             points: 0,
         }
     },
@@ -27,18 +27,18 @@ export const useUserStore = defineStore('user', {
                 this.username = res.data.data.username;
                 this.name = res.data.data.name;
                 if (res.data.data.id_type === 0) {
-                    this.idType = "身份证";
+                    this.id_type = "身份证";
                 } else if (res.data.data.id_type === 1) {
-                    this.idType = "护照";
+                    this.id_type = "护照";
                 } else {
-                    this.idType = "其它";
+                    this.id_type = "其它";
                 }
                 this.idn = res.data.data.idn;
                 this.phone = res.data.data.phone;
                 if (res.data.data.admin) {
-                    this.isAdmin = "管理员";
+                    this.admin = "管理员";
                 } else {
-                    this.isAdmin = "用户";
+                    this.admin = "用户";
                 }
                 this.points = res.data.data.points;
             }).catch((err) => {
