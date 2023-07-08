@@ -15,7 +15,7 @@ const stations = useStationsStore()
 const user = useUserStore()
 
 const checkAdmin = () => {
-  if (user.admin === "用户") {
+  if (user.admin === "用户" || user.name === '') {
     ElNotification({
       offset: 70,
       title: '权限不足',
