@@ -52,7 +52,7 @@ const orderRules = reactive<FormRules>({
         pattern: /^1[3456789]\d{9}$/, message: '手机号码不符合要求', trigger: 'change'
     }],
     seat_type: [{ required: true, message: '此字段为必填项', trigger: 'change' }, {
-        pattern: /^(二等座|一等座|商务座)$/, message: '座次不符合', trigger: 'change'
+        pattern: /^(二等座|一等座|商务座|软卧|硬卧|软座|硬座)$/, message: '座次不符合', trigger: 'change'
     }],
 })
 
